@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registration Form</title>
+</head>
+<style>
+    h1{
+        color:darkblue;
+        text-align: center;
+    }
+    .valid{
+        color:green;
+    }
+    .invalid{
+        color:red;
+    }
+    div
+         {
+            margin-bottom: 30px;
+        }
+        .error 
+        {
+            color: red;
+            font-size: 1rem;
+        }
+        form 
+        {
+            width: 300px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid white;
+            border-radius: 13px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            font-size: larger;
+            background-color: greenyellow;
+          
+        }
+</style>
+
+<body>
+    <h1>Registration Form</h1>
+    <form id="registration">
+        <div>
+            <label for="name_input">Enter your Name:</label>
+            <input type="text" id="name_input" name="name_input" required pattern="[A-Za-z]{3,}">
+            <small id="name_error" class="error"></small>
+        </div>
+
+        <div>
+            <label for="email_input">Enter your Mail:</label>
+            <input type="email" id="email_input" name="email_input" required>
+            <small id="email_error" class="error"></small>
+        </div>
+
+        <div>
+            <label for="password_input">Enter your Password:</label>
+            <input type="password" id="password_input" name="password_input" required>
+            <small id="password_error" class="error"></small>
+        </div>
+
+        <div>
+            <label for="conpass_input">Enter your Confirm Password:</label>
+            <input type="password" id="conpass_input" name="conpass_input" required>
+            <small id="conpass_error" class="error"></small>
+        </div>
+
+        <div>
+            <label for="dob_input">Enter your Date of Birth:</label>
+            <input type="date" id="dob_input" name="dob_input" required>
+            <small id="dob_error" class="error"></small>
+        </div>
+        <div>
+            <button type="submit" id="submit_button" disabled>Register</button>
+        </div>
+    </form>
+
+    <script>
+        const NameInput = document.getElementById('name_input');
+        const EmailInput = document.getElementById('email_input');
+        const PassInput = document.getElementById('password_input');
+        const ConpassInput = document.getElementById('conpass_input');
+        const DobInput = document.getElementById('dob_input');
+        const SubmitButton = document.getElementById('submit_button');
+
+        NameInput.addEventListener('input', validateName);
+        EmailInput.addEventListener('input', validateEmail);
+        PassInput.addEventListener('input', validatePass);
+        ConpassInput.addEventListener('input', validateConpass);
+        DobInput.addEventListener('input', validateDOB);
+
+        document.getElementById('registration').addEventListener('submit', function(event){
+            event.preventDefault();
+            alert('Form Submitted Successfully');
+        });
+
+        function validateName() {
+            const name = NameInput.value.trim();
+            const NameError = document.getElementById('name_error');
+            if (name.length < 3 || !/^[A-Za-z]+$/.test(name)) {
+                NameInput.classList.remove('valid');
+                NameInput.classList.add('invalid');
+                NameError.textContent = "Wrong input. It must be at least three characters.";
+            } else {
+                NameInput.classList.remove('invalid');
+                NameInput.classList.add('valid');
+                NameError.textContent = "";
+            }
+            validateForm();
+        }
+
+        function validateEmail() {
+            const email = EmailInput.value;
+            const EmailError = document.getElementById('email_error');
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                EmailInput.classList.remove('valid');
+                EmailInput.classList.add('invalid');
+                EmailError.textContent = "Wrong input. It must be a valid email address.";
+            } else {
+                EmailInput.classList.remove('invalid');
+                EmailInput.classList.add('valid');
+                EmailError.textContent = "";
+            }
+            validateForm();
+        }
+
+        function validatePass() {
+            const pass = PassInput.value;
+            const PassError = document.getElementById('password_error');
+            if (pass.length < 8 || !/^(?=.*[A-Za-z])(?=.*\d).+$/.test(pass)) {
+                PassInput.classList.remove('valid');
+                PassInput.classList.add('invalid');
+                PassError.textContent = "Wrong Password input.";
+            } else {
+                PassInput.classList.remove('invalid');
+                PassInput.classList.add('valid');
+                PassError.textContent = "";
+            }
+            validateForm();
+        }
+
+        function validateConpass() {
+            const conpass = ConpassInput.value;
+            const pass = PassInput.value;
+            const ConPassError = document.getElementById('conpass_error');
+            if (conpass !== pass) {
+                ConpassInput.classList.remove('valid');
+                ConpassInput.classList.add('invalid');
+                ConPassError.textContent = "Password does not match.";
+            } else {
+                ConpassInput.classList.remove('invalid');
+                ConpassInput.classList.add('valid');
+                ConPassError.textContent = "";
+            }
+            validateForm();
+        }
+
+        function validateDOB() {
+            const dob = new Date(DobInput.value);
+            const DobError = document.getElementById('dob_error');
+            if (isNaN(dob.getTime())) {
+                DobInput.classList.remove('valid');
+                DobInput.classList.add('invalid');
+                DobError.textContent = "Please enter your date of birth.";
+            } else {
+                const today = new Date();
+                const age = today.getFullYear() - dob.getFullYear();
+                if (age >= 18) {
+                    DobInput.classList.remove('invalid');
+                    DobInput.classList.add('valid');
+                    DobError.textContent = "";
+                } else {
+                    DobInput.classList.remove('valid');
+                    DobInput.classList.add('invalid');
+                    DobError.textContent = "You must be at least 18 years old.";
+                }
+            }
+            validateForm();
+        }
+
+        function validateForm() {
+            if (NameInput.classList.contains('valid') && EmailInput.classList.contains('valid') && 
+                PassInput.classList.contains('valid') && ConpassInput.classList.contains('valid') && 
+                DobInput.classList.contains('valid')) {
+                SubmitButton.disabled = false;
+            } else {
+                SubmitButton.disabled = true;
+            }
+        }
+    </script>
+</body>
+</html>
